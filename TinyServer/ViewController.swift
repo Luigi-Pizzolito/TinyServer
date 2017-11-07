@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class ViewController: NSViewController {
+class ViewController: NSViewController, NSWindowDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +21,17 @@ class ViewController: NSViewController {
         // Update the view, if already loaded.
         }
     }
-
+    
+    override func viewDidAppear() {
+        self.view.window?.delegate = self
+    }
+    
+    func windowShouldClose(_ sender: Any) -> Bool {
+        try! buildTask.terminate()
+        self.showNotification(title: "Tiny Web Server Shutting Down", subtitle: "Your web server will be terminated", infotext: "Until the next time...", image: self.appIcon)
+        NSApplication.shared().terminate(self)
+        return true
+    }
     
     
     @IBOutlet var PortField: NSTextField!
@@ -30,8 +40,10 @@ class ViewController: NSViewController {
     @IBOutlet var LogField: NSTextView!
     @IBOutlet var RunStopButtons: NSButton!
     dynamic var isRunning = false
+    var crashFlag:Bool = false;
     var outputPipe:Pipe!
     var buildTask:Process!
+    let appIcon:NSImage = NSWorkspace.shared().icon(forFile: Bundle.main.bundlePath)
     
     @IBAction func RunStopButton(_ sender: Any) {
         var rootPath:String = RootField.stringValue;
@@ -43,11 +55,12 @@ class ViewController: NSViewController {
         if RunStopButtons.title == "Stop" {
             //stop running
             buildTask.terminate();
-            print("Stopping Web Server...");
+            crashFlag = false;
+            //print("Stopping Web Server...");
             
         } else if RunStopButtons.title == "Run" {
             //start running!
-            if PortField.stringValue == "" {PortField.stringValue = "80"; portNum = "80";}
+            if PortField.stringValue == "" {PortField.stringValue = "8888"; portNum = "8888";}
             if RootField.stringValue == "" {RootField.stringValue = "/"; rootPath = "/";}
             LogField.string = ""
             self.RootTyped(sender: Any?.self);
@@ -65,16 +78,13 @@ class ViewController: NSViewController {
             arguments.append(javaServer)
                 
             runScript(arguments)
-                
-            
-            
-            //LogField.textStorage?.replaceCharacters(in: NSMakeRange(0,(LogField.textStorage?.length)!), with: "Starting server on 127.0.0.1:"+portNum+" with root at "+rootPath);
         }
         if isRunning {isRunning = false} else if !isRunning {isRunning = true;}
     }
     
     func runScript(_ arguments:[String]) {
         isRunning = true
+        crashFlag = true;
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         
         taskQueue.async {
@@ -98,7 +108,14 @@ class ViewController: NSViewController {
                     self.RootField.isEnabled = true;
                     self.RootInd.isEnabled = true;
                     //LogField.string = "Choose a root address and a port. Then press run to start the web server.";
-                    print("Web Server Stopped");
+                    if self.crashFlag {
+                        //print("Web Server Crashed");
+                        self.showNotification(title: "Tiny Web Server Crashed", subtitle: "Your web server has crashed...", infotext: self.RootField.stringValue, image: self.appIcon)
+                    } else if !self.crashFlag {
+                        //print("Web Server Stopped");
+                        self.showNotification(title: "Tiny Web Server Stopped", subtitle: "Your web server has stopped running...", infotext: self.RootField.stringValue, image: self.appIcon)
+                    }
+
                 })
                 
             }
@@ -107,7 +124,7 @@ class ViewController: NSViewController {
             
             //4.
             self.buildTask.launch()
-            
+            self.showNotification(title: "Tiny Web Server Started", subtitle: "Your web server has started running...", infotext: self.RootField.stringValue, image: self.appIcon)
             //5.
             self.buildTask.waitUntilExit()
             
@@ -115,6 +132,27 @@ class ViewController: NSViewController {
         
     }
     
+    func showNotification(title:String, subtitle:String, infotext:String, image:NSImage) -> Void {
+        let notification = NSUserNotification()
+        notification.identifier = self.randomString(length: 8)
+        notification.title = title
+        notification.subtitle = subtitle
+        notification.informativeText = infotext
+        //notification.soundName = NSUserNotificationDefaultSoundName
+        notification.contentImage = image
+        // Manually display the notification
+        let notificationCenter = NSUserNotificationCenter.default
+        notificationCenter.deliver(notification)
+    }
+    func randomString(length:Int) -> String {
+        let charSet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        var c = charSet.characters.map { String($0) }
+        var s:String = ""
+        for _ in (1...length) {
+            s.append(c[Int(arc4random()) % c.count])
+        }
+        return s
+    }
     
     func captureStandardOutputAndRouteToTextView(_ task:Process) {
         
@@ -190,11 +228,85 @@ class ViewController: NSViewController {
                 }
             }
         }
+    } 
+
+    @IBAction func showHelp(_ sender: Any) {
+        NSWorkspace.shared().open(NSURL(string: "http://www.jibble.org/jibblewebserver.php")! as URL)
     }
     
+    @IBAction func savelog(_ sender: Any) {
+        let savePanel = NSSavePanel();
+        savePanel.title = "Select where to save the log:"
+        savePanel.message = "The log is saved as a .log"
+        savePanel.prompt = "Save Log";
+        savePanel.canCreateDirectories = true;
+        savePanel.showsHiddenFiles = true;
+        savePanel.showsTagField = true;
+        savePanel.tagNames = ["TinyServer"];
+        savePanel.isExtensionHidden = false;
+        savePanel.canSelectHiddenExtension = true;
+        savePanel.treatsFilePackagesAsDirectories = true;
+        savePanel.allowedFileTypes = ["log"];
+        savePanel.allowsOtherFileTypes = false;
+        savePanel.delegate = self as? NSOpenSavePanelDelegate;
+        savePanel.begin { (result) -> Void in
+            if(result == NSFileHandlingPanelOKButton){
+                let lpth = savePanel.url!.path
+                let lpath = NSURL(fileURLWithPath: lpth) as URL
+                do {
+                    let text = self.LogField.string;
+                    try text?.write(to: lpath as URL, atomically: false, encoding: String.Encoding.utf8)
+                } catch {self.showNotification(title: "Tiny Web Server Error", subtitle: "Could not save your log", infotext: "Please try again...", image: self.appIcon)}
+                
+            }
+        }
+    }
     
-
+    @IBAction func quit(_ sender: Any) {
+        try! buildTask.terminate()
+        self.showNotification(title: "Tiny Web Server Shutting Down", subtitle: "Your web server will be terminated", infotext: "Until the next time...", image: self.appIcon)
+        NSApplication.shared().terminate(self)
+    }
     
+    @IBAction func runMenu(_ sender: Any) {
+        if RunStopButtons.title == "Run" {
+            var rootPath:String = RootField.stringValue;
+            var portNum:String = PortField.stringValue;
+            guard let javaServer = Bundle.main.path(forResource: "WebServerLite",ofType:"jar") else {
+                print("Unable to locate WebServerLite.jar")
+                return
+            }
+            //start running!
+            if PortField.stringValue == "" {PortField.stringValue = "8888"; portNum = "8888";}
+            if RootField.stringValue == "" {RootField.stringValue = "/"; rootPath = "/";}
+            LogField.string = ""
+            self.RootTyped(sender: Any?.self);
+            RunStopButtons.title = "Stop";
+            PortField.isEnabled = false;
+            RootField.isEnabled = false;
+            RootInd.isEnabled = false;
+            //debug
+            //            print("rootPath is \(rootPath)");
+            //            print("portNum is \(portNum)");
+            //            print("javaServer is at \(javaServer)");
+            var arguments:[String] = []
+            arguments.append(portNum)
+            arguments.append(rootPath)
+            arguments.append(javaServer)
+            
+            runScript(arguments)
+            if isRunning {isRunning = false} else if !isRunning {isRunning = true;}
+        }
+    }
     
+    @IBAction func stopMenu(_ sender: Any) {
+        if RunStopButtons.title == "Stop" {
+            //stop running
+            buildTask.terminate();
+            crashFlag = false;
+            //print("Stopping Web Server...");
+            if isRunning {isRunning = false} else if !isRunning {isRunning = true;}
+        }
+    }
 }
 
