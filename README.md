@@ -1,6 +1,8 @@
 # TinyServer
 A lightweight simple web server with a GUI.
 
+![GUI Image](https://gangster45671.github.io/TinyServer/pictures/GUI.png)
+
 #### This is based on Jibble Web Server
 [Check out the original page here](http://www.jibble.org/jibblewebserver.php)
 
@@ -102,7 +104,7 @@ echo \<p\>Server variables: -
 echo \<pre\>
 set
 ```
-To try out the above script, make sure it is saved in a directory called cgi-bin, under your web root directory, and that it is executable (chmod +x).  Now if you access this file via a web browser, rather than seeing the contents of the file, you should (fingers crossed!) see the output from executing the batch file.  This should give you a page that displays the text "If you can read this, then your CGI jibble is set up properly!", followed by a list of the server variables.  These typically show you what sort of web browser the client is using, etc.
+To try out the above script, make sure it is saved in a directory called cgi-bin, under your web root directory, and that it is executable (`chmod +x`).  Now if you access this file via a web browser, rather than seeing the contents of the file, you should (fingers crossed!) see the output from executing the batch file.  This should give you a page that displays the text "If you can read this, then your CGI jibble is set up properly!", followed by a list of the server variables.  These typically show you what sort of web browser the client is using, etc.
 
 ### Logging
 All HTTP requests, whether successful or not, will be logged to the standard output.  You may find it useful to redirect this to a file for later analysis.
