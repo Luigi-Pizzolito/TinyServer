@@ -1,0 +1,8 @@
+
+DerivedData/*
+*.xcindexdb
+*.xcindexdb-shm
+*.xcindexdb-wal
+DerivedData/TinyServer/Index/Debug/macosx10.12-x86_64/TinyServer.xcindex/db.xcindexdb-wal
+DerivedData/TinyServer/Index/Debug/macosx10.12-x86_64/TinyServer.xcindex/db.xcindexdb-shm
+DerivedData/TinyServer/Index/Debug/macosx10.12-x86_64/TinyServer.xcindex/db.xcindexdb
