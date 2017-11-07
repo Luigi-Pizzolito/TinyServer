@@ -14,6 +14,7 @@
 		235C1F541FB13B090030E429 /* TinyServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235C1F531FB13B090030E429 /* TinyServerTests.swift */; };
 		235C1F5F1FB13B090030E429 /* TinyServerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235C1F5E1FB13B090030E429 /* TinyServerUITests.swift */; };
 		235C1F791FB1B6590030E429 /* WebServerLite.jar in Resources */ = {isa = PBXBuildFile; fileRef = 235C1F771FB1B6440030E429 /* WebServerLite.jar */; };
+		235C1F7A1FB1DA880030E429 /* RunServer.command in Resources */ = {isa = PBXBuildFile; fileRef = 235C1F6C1FB1B0920030E429 /* RunServer.command */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +47,7 @@
 		235C1F5A1FB13B090030E429 /* TinyServerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinyServerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		235C1F5E1FB13B090030E429 /* TinyServerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyServerUITests.swift; sourceTree = "<group>"; };
 		235C1F601FB13B090030E429 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		235C1F6C1FB1B0920030E429 /* RunServer.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RunServer.sh; sourceTree = "<group>"; };
+		235C1F6C1FB1B0920030E429 /* RunServer.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RunServer.command; sourceTree = "<group>"; };
 		235C1F771FB1B6440030E429 /* WebServerLite.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; path = WebServerLite.jar; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -101,7 +102,7 @@
 				235C1F771FB1B6440030E429 /* WebServerLite.jar */,
 				235C1F411FB13B090030E429 /* AppDelegate.swift */,
 				235C1F431FB13B090030E429 /* ViewController.swift */,
-				235C1F6C1FB1B0920030E429 /* RunServer.sh */,
+				235C1F6C1FB1B0920030E429 /* RunServer.command */,
 				235C1F451FB13B090030E429 /* Assets.xcassets */,
 				235C1F471FB13B090030E429 /* Main.storyboard */,
 				235C1F4A1FB13B090030E429 /* Info.plist */,
@@ -234,6 +235,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				235C1F7A1FB1DA880030E429 /* RunServer.command in Resources */,
 				235C1F791FB1B6590030E429 /* WebServerLite.jar in Resources */,
 				235C1F461FB13B090030E429 /* Assets.xcassets in Resources */,
 				235C1F491FB13B090030E429 /* Main.storyboard in Resources */,

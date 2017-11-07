@@ -7,7 +7,6 @@
 //
 
 import Cocoa
-import AppKit
 
 class ViewController: NSViewController {
 
@@ -29,44 +28,130 @@ class ViewController: NSViewController {
     @IBOutlet var RootField: NSTextField!
     @IBOutlet var RootInd: NSButton!
     @IBOutlet var LogField: NSTextView!
-    @IBOutlet var RunStopButton: NSButton!
-    var isRunning:Bool = false;
+    @IBOutlet var RunStopButtons: NSButton!
+    dynamic var isRunning = false
+    var outputPipe:Pipe!
+    var buildTask:Process!
     
     @IBAction func RunStopButton(_ sender: Any) {
         var rootPath:String = RootField.stringValue;
         var portNum:String = PortField.stringValue;
         guard let javaServer = Bundle.main.path(forResource: "WebServerLite",ofType:"jar") else {
-            print("error javaServer");
+            print("Unable to locate WebServerLite.jar")
             return
         }
-        
-        if isRunning {
+        if RunStopButtons.title == "Stop" {
             //stop running
-            isRunning = false;
-            RunStopButton.title = "Run";
-            PortField.isEnabled = true;
-            RootField.isEnabled = true;
-            RootInd.isEnabled = true;
-            LogField.textStorage?.replaceCharacters(in: NSMakeRange(0,(LogField.textStorage?.length)!), with: "Choose a root address and a port. Then press run to start the web server.");
+            buildTask.terminate();
+            print("Stopping Web Server...");
             
-        } else if !isRunning {
+        } else if RunStopButtons.title == "Run" {
             //start running!
-            isRunning = true;
             if PortField.stringValue == "" {PortField.stringValue = "80"; portNum = "80";}
             if RootField.stringValue == "" {RootField.stringValue = "/"; rootPath = "/";}
+            LogField.string = ""
             self.RootTyped(sender: Any?.self);
-            RunStopButton.title = "Stop";
+            RunStopButtons.title = "Stop";
             PortField.isEnabled = false;
             RootField.isEnabled = false;
             RootInd.isEnabled = false;
             //debug
-            print("rootPath is \(rootPath)");
-            print("portNum is \(portNum)");
-            print("javaServer is at \(javaServer)");
-            //run
-            LogField.textStorage?.replaceCharacters(in: NSMakeRange(0,(LogField.textStorage?.length)!), with: "Starting server on 127.0.0.1:"+portNum+" with root at "+rootPath);
+//            print("rootPath is \(rootPath)");
+//            print("portNum is \(portNum)");
+//            print("javaServer is at \(javaServer)");
+            var arguments:[String] = []
+            arguments.append(portNum)
+            arguments.append(rootPath)
+            arguments.append(javaServer)
+                
+            runScript(arguments)
+                
+            
+            
+            //LogField.textStorage?.replaceCharacters(in: NSMakeRange(0,(LogField.textStorage?.length)!), with: "Starting server on 127.0.0.1:"+portNum+" with root at "+rootPath);
         }
+        if isRunning {isRunning = false} else if !isRunning {isRunning = true;}
     }
+    
+    func runScript(_ arguments:[String]) {
+        isRunning = true
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        
+        taskQueue.async {
+            
+            guard let path = Bundle.main.path(forResource: "RunServer",ofType:"command") else {
+                print("Unable to locate RunServer.command")
+                return
+            }
+            
+            self.buildTask = Process()
+            self.buildTask.launchPath = path
+            self.buildTask.arguments = arguments
+            
+            self.buildTask.terminationHandler = {
+                
+                task in
+                DispatchQueue.main.async(execute: {
+                    self.isRunning = false
+                    self.RunStopButtons.title = "Run";
+                    self.PortField.isEnabled = true;
+                    self.RootField.isEnabled = true;
+                    self.RootInd.isEnabled = true;
+                    //LogField.string = "Choose a root address and a port. Then press run to start the web server.";
+                    print("Web Server Stopped");
+                })
+                
+            }
+            
+            self.captureStandardOutputAndRouteToTextView(self.buildTask)
+            
+            //4.
+            self.buildTask.launch()
+            
+            //5.
+            self.buildTask.waitUntilExit()
+            
+        }
+        
+    }
+    
+    
+    func captureStandardOutputAndRouteToTextView(_ task:Process) {
+        
+        //1.
+        outputPipe = Pipe()
+        task.standardOutput = outputPipe
+        
+        //2.
+        outputPipe.fileHandleForReading.waitForDataInBackgroundAndNotify()
+        
+        //3.
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.NSFileHandleDataAvailable, object: outputPipe.fileHandleForReading , queue: nil) {
+            notification in
+            
+            //4.
+            let output = self.outputPipe.fileHandleForReading.availableData
+            let outputString = String(data: output, encoding: String.Encoding.utf8) ?? ""
+            
+            //5.
+            DispatchQueue.main.async(execute: {
+                let previousOutput = self.LogField.string ?? ""
+                let nextOutput = previousOutput + "\n" + outputString
+                self.LogField.string = nextOutput
+                
+                let range = NSRange(location:nextOutput.characters.count,length:0)
+                self.LogField.scrollRangeToVisible(range)
+                
+            })
+            
+            //6.
+            self.outputPipe.fileHandleForReading.waitForDataInBackgroundAndNotify()
+            
+            
+        }
+        
+    }
+
     
     @IBAction func RootTyped(_ sender: Any) {
         //check root path

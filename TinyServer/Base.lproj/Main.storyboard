@@ -686,7 +686,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="246" height="178"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Wa-Qu-m8b">
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Wa-Qu-m8b" userLabel="Run Stop Button">
                                 <rect key="frame" x="182" y="143" width="64" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Run" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Coh-wE-18l">
@@ -780,6 +780,7 @@
                         <outlet property="RootField" destination="vAK-E8-31h" id="AZH-PU-Yah"/>
                         <outlet property="RootInd" destination="EAQ-7P-hJO" id="2gr-7N-us3"/>
                         <outlet property="RunStopButton" destination="6Wa-Qu-m8b" id="8nx-da-Dz1"/>
+                        <outlet property="RunStopButtons" destination="6Wa-Qu-m8b" id="yLz-A3-9Hz"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
