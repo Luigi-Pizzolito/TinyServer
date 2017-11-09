@@ -27,8 +27,8 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
     
     func windowShouldClose(_ sender: Any) -> Bool {
-        try! buildTask.terminate()
-        self.showNotification(title: "Tiny Web Server Shutting Down", subtitle: "Your web server will be terminated", infotext: "Until the next time...", image: self.appIcon)
+        if RunStopButtons.title == "Stop" {buildTask.terminate()}
+        self.showNotification(title: "Tiny Web Server Shutting Down", subtitle: "Your web server will be terminated", infotext: "Until the next time...", image: self.byeIcon)
         NSApplication.shared().terminate(self)
         return true
     }
@@ -44,6 +44,11 @@ class ViewController: NSViewController, NSWindowDelegate {
     var outputPipe:Pipe!
     var buildTask:Process!
     let appIcon:NSImage = NSWorkspace.shared().icon(forFile: Bundle.main.bundlePath)
+    let crashIcon:NSImage = NSImage(contentsOfFile: Bundle.main.path(forResource: "iconCrash",ofType:"png")!)!
+    let byeIcon:NSImage = NSImage(contentsOfFile: Bundle.main.path(forResource: "iconBye",ofType:"png")!)!
+    let stopIcon:NSImage = NSImage(contentsOfFile: Bundle.main.path(forResource: "iconStop",ofType:"png")!)!
+    let startIcon:NSImage = NSImage(contentsOfFile: Bundle.main.path(forResource: "iconStart",ofType:"png")!)!
+    
     
     @IBAction func RunStopButton(_ sender: Any) {
         var rootPath:String = RootField.stringValue;
@@ -110,10 +115,10 @@ class ViewController: NSViewController, NSWindowDelegate {
                     //LogField.string = "Choose a root address and a port. Then press run to start the web server.";
                     if self.crashFlag {
                         //print("Web Server Crashed");
-                        self.showNotification(title: "Tiny Web Server Crashed", subtitle: "Your web server has crashed...", infotext: self.RootField.stringValue, image: self.appIcon)
+                        self.showNotification(title: "Tiny Web Server Crashed", subtitle: "Your web server has crashed...", infotext: self.RootField.stringValue, image: self.crashIcon)
                     } else if !self.crashFlag {
                         //print("Web Server Stopped");
-                        self.showNotification(title: "Tiny Web Server Stopped", subtitle: "Your web server has stopped running...", infotext: self.RootField.stringValue, image: self.appIcon)
+                        self.showNotification(title: "Tiny Web Server Stopped", subtitle: "Your web server has stopped running...", infotext: self.RootField.stringValue, image: self.stopIcon)
                     }
 
                 })
@@ -124,7 +129,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             
             //4.
             self.buildTask.launch()
-            self.showNotification(title: "Tiny Web Server Started", subtitle: "Your web server has started running...", infotext: self.RootField.stringValue, image: self.appIcon)
+            self.showNotification(title: "Tiny Web Server Started", subtitle: "Your web server has started running...", infotext: self.RootField.stringValue, image: self.startIcon)
             //5.
             self.buildTask.waitUntilExit()
             
@@ -256,15 +261,17 @@ class ViewController: NSViewController, NSWindowDelegate {
                 do {
                     let text = self.LogField.string;
                     try text?.write(to: lpath as URL, atomically: false, encoding: String.Encoding.utf8)
-                } catch {self.showNotification(title: "Tiny Web Server Error", subtitle: "Could not save your log", infotext: "Please try again...", image: self.appIcon)}
+                } catch {
+                    self.showNotification(title: "Tiny Web Server Error", subtitle: "Could not save your log", infotext: "Please try again...", image: self.crashIcon)
+                }
                 
             }
         }
     }
     
     @IBAction func quit(_ sender: Any) {
-        try! buildTask.terminate()
-        self.showNotification(title: "Tiny Web Server Shutting Down", subtitle: "Your web server will be terminated", infotext: "Until the next time...", image: self.appIcon)
+        if RunStopButtons.title == "Stop" {buildTask.terminate()}
+        self.showNotification(title: "Tiny Web Server Shutting Down", subtitle: "Your web server will be terminated", infotext: "Until the next time...", image: self.byeIcon)
         NSApplication.shared().terminate(self)
     }
     
@@ -308,5 +315,24 @@ class ViewController: NSViewController, NSWindowDelegate {
             if isRunning {isRunning = false} else if !isRunning {isRunning = true;}
         }
     }
+    @IBAction func viewSource(_ sender: Any) {
+        NSWorkspace.shared().open(NSURL(string: "http://github.com/Gangster45671/TinyServer")! as URL)
+    }
+    @IBAction func viewAbout(_ sender: Any) {
+        NSWorkspace.shared().open(NSURL(string: "http://github.com/Gangster45671/TinyServer/blob/master/README.md")! as URL)
+    }
+    @IBAction func touchRun(_ sender: Any) {
+        runMenu(sender: Any?.self)
+    }
+    @IBAction func touchStop(_ sender: Any) {
+        stopMenu(sender: Any?.self)
+    }
+    @IBAction func touchOpen(_ sender: Any) {
+        rootPanel(sender: Any?.self)
+    }
+    @IBAction func touchLog(_ sender: Any) {
+        savelog(sender: Any?.self)
+    }
+    
 }
 

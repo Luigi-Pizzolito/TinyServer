@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23193A951FB439A500388256 /* iconCrash.png in Resources */ = {isa = PBXBuildFile; fileRef = 23193A911FB439A500388256 /* iconCrash.png */; };
+		23193A961FB439A500388256 /* iconBye.png in Resources */ = {isa = PBXBuildFile; fileRef = 23193A921FB439A500388256 /* iconBye.png */; };
+		23193A971FB439A500388256 /* iconStop.png in Resources */ = {isa = PBXBuildFile; fileRef = 23193A931FB439A500388256 /* iconStop.png */; };
+		23193A981FB439A500388256 /* iconStart.png in Resources */ = {isa = PBXBuildFile; fileRef = 23193A941FB439A500388256 /* iconStart.png */; };
 		235C1F421FB13B090030E429 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235C1F411FB13B090030E429 /* AppDelegate.swift */; };
 		235C1F441FB13B090030E429 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235C1F431FB13B090030E429 /* ViewController.swift */; };
 		235C1F461FB13B090030E429 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 235C1F451FB13B090030E429 /* Assets.xcassets */; };
@@ -35,6 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		23193A911FB439A500388256 /* iconCrash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconCrash.png; sourceTree = "<group>"; };
+		23193A921FB439A500388256 /* iconBye.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconBye.png; sourceTree = "<group>"; };
+		23193A931FB439A500388256 /* iconStop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconStop.png; sourceTree = "<group>"; };
+		23193A941FB439A500388256 /* iconStart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconStart.png; sourceTree = "<group>"; };
 		235C1F3E1FB13B090030E429 /* TinyServer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinyServer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		235C1F411FB13B090030E429 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		235C1F431FB13B090030E429 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +84,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		23193A901FB4398900388256 /* Notification Icons */ = {
+			isa = PBXGroup;
+			children = (
+				23193A911FB439A500388256 /* iconCrash.png */,
+				23193A921FB439A500388256 /* iconBye.png */,
+				23193A931FB439A500388256 /* iconStop.png */,
+				23193A941FB439A500388256 /* iconStart.png */,
+			);
+			name = "Notification Icons";
+			sourceTree = "<group>";
+		};
 		235C1F351FB13B090030E429 = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +125,7 @@
 				235C1F451FB13B090030E429 /* Assets.xcassets */,
 				235C1F471FB13B090030E429 /* Main.storyboard */,
 				235C1F4A1FB13B090030E429 /* Info.plist */,
+				23193A901FB4398900388256 /* Notification Icons */,
 			);
 			path = TinyServer;
 			sourceTree = "<group>";
@@ -235,10 +255,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23193A971FB439A500388256 /* iconStop.png in Resources */,
 				235C1F7A1FB1DA880030E429 /* RunServer.command in Resources */,
+				23193A961FB439A500388256 /* iconBye.png in Resources */,
 				235C1F791FB1B6590030E429 /* WebServerLite.jar in Resources */,
 				235C1F461FB13B090030E429 /* Assets.xcassets in Resources */,
+				23193A951FB439A500388256 /* iconCrash.png in Resources */,
 				235C1F491FB13B090030E429 /* Main.storyboard in Resources */,
+				23193A981FB439A500388256 /* iconStart.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,6 +530,7 @@
 				235C1F651FB13B090030E429 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		235C1F661FB13B090030E429 /* Build configuration list for PBXNativeTarget "TinyServerTests" */ = {
 			isa = XCConfigurationList;
@@ -514,6 +539,7 @@
 				235C1F681FB13B090030E429 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		235C1F691FB13B090030E429 /* Build configuration list for PBXNativeTarget "TinyServerUITests" */ = {
 			isa = XCConfigurationList;
@@ -522,6 +548,7 @@
 				235C1F6B1FB13B090030E429 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

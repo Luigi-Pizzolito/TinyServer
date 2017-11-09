@@ -2,8 +2,10 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaDFRPlugin" version="12062"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+        <capability name="the Touch Bar" message="Use a version of macOS with Touch Bar support." minToolsVersion="8.1" minSystemVersion="10.12.1" requiredIntegratedClassName="NSTouchBar"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -16,7 +18,13 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="TinyServer" systemMenu="apple" id="uQy-DD-JDr">
                                     <items>
-                                        <menuItem title="About TinyServer" id="5kV-Vb-QxS">
+                                        <menuItem title="About TinyServer" id="IUo-zS-zQG">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="viewAbout:" target="Ady-hI-5gd" id="vZ5-hW-3iJ"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="About This App" id="5kV-Vb-QxS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem"/>
@@ -66,6 +74,11 @@
                                         <menuItem title="Stop Server" keyEquivalent="m" id="KwK-Qo-pjV">
                                             <connections>
                                                 <action selector="stopMenu" target="Ady-hI-5gd" id="UdR-fo-tNe"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Open Directory" keyEquivalent="o" id="6MV-RI-vdt">
+                                            <connections>
+                                                <action selector="rootPanel:" target="Ady-hI-5gd" id="Pti-FA-kc8"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="K6f-w9-dcy"/>
@@ -164,6 +177,12 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
                                     <items>
+                                        <menuItem title="View Source on GitHub" keyEquivalent="s" id="tXL-cv-VJV">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="viewSource:" target="Ady-hI-5gd" id="mM2-dx-Vgv"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Technical Information" keyEquivalent="?" id="vpg-ad-NlD">
                                             <connections>
                                                 <action selector="showHelp" target="Ady-hI-5gd" id="aLX-WY-RjZ"/>
@@ -221,7 +240,7 @@
                                 </connections>
                             </button>
                             <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="oWG-wL-fvw">
-                                <rect key="frame" x="6" y="143" width="234" height="5"/>
+                                <rect key="frame" x="6" y="140" width="234" height="11"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </box>
                             <scrollView autoresizesSubviews="NO" fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hsd-6s-d2m">
@@ -271,7 +290,7 @@
                                     <action selector="RootTyped:" target="XfG-lQ-9wD" id="13y-Em-va9"/>
                                 </connections>
                             </textField>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Ss-fO-aC1">
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Ss-fO-aC1">
                                 <rect key="frame" x="143" y="150" width="39" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Port" drawsBackground="YES" id="uFo-bH-v0q">
@@ -297,6 +316,71 @@
                             </button>
                         </subviews>
                     </view>
+                    <touchBar key="touchBar" id="ZUq-4N-5eX">
+                        <touchBarItems>
+                            <touchBarItem id="MNS-dR-q96">
+                                <viewController key="viewController" id="POT-Dj-5xl">
+                                    <button key="view" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iVD-AU-qfZ">
+                                        <rect key="frame" x="0.0" y="0.0" width="108" height="30"/>
+                                        <buttonCell key="cell" type="push" title="Run Server" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yHC-17-cxP">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" usesAppearanceFont="YES"/>
+                                            <connections>
+                                                <action selector="touchRun:" target="XfG-lQ-9wD" id="S4S-GI-8FL"/>
+                                            </connections>
+                                        </buttonCell>
+                                    </button>
+                                </viewController>
+                                <size key="designTimeSize" width="108" height="30"/>
+                            </touchBarItem>
+                            <touchBarItem id="XqP-zD-obz">
+                                <viewController key="viewController" id="ze1-qn-QYi">
+                                    <button key="view" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8sV-aY-uod">
+                                        <rect key="frame" x="0.0" y="0.0" width="108" height="30"/>
+                                        <buttonCell key="cell" type="push" title="Stop Server" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LqQ-Rk-NJ8">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" usesAppearanceFont="YES"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="touchStop:" target="XfG-lQ-9wD" id="anx-WP-63D"/>
+                                        </connections>
+                                    </button>
+                                </viewController>
+                                <size key="designTimeSize" width="108" height="30"/>
+                            </touchBarItem>
+                            <touchBarSpacerItem identifier="NSTouchBarItemIdentifierFlexibleSpace" id="BQV-Xr-ZQh"/>
+                            <touchBarItem id="gkl-Tk-SIn">
+                                <viewController key="viewController" id="U6o-6o-8ww">
+                                    <button key="view" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kQ9-BA-PQj">
+                                        <rect key="frame" x="0.0" y="0.0" width="126" height="30"/>
+                                        <buttonCell key="cell" type="push" title="Open Directory" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8fn-c9-O57">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" usesAppearanceFont="YES"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="touchOpen:" target="XfG-lQ-9wD" id="duE-TT-c9j"/>
+                                        </connections>
+                                    </button>
+                                </viewController>
+                                <size key="designTimeSize" width="126" height="30"/>
+                            </touchBarItem>
+                            <touchBarItem id="Pal-yG-EXI">
+                                <viewController key="viewController" id="Mjq-Mf-g6b">
+                                    <button key="view" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Zey-1C-w8f">
+                                        <rect key="frame" x="0.0" y="0.0" width="90" height="30"/>
+                                        <buttonCell key="cell" type="push" title="Save Log" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LrA-eR-OkN">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" usesAppearanceFont="YES"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="touchLog:" target="XfG-lQ-9wD" id="L4X-TR-cc3"/>
+                                        </connections>
+                                    </button>
+                                </viewController>
+                                <size key="designTimeSize" width="90" height="30"/>
+                            </touchBarItem>
+                        </touchBarItems>
+                    </touchBar>
                     <connections>
                         <outlet property="LogField" destination="qJq-vJ-bUp" id="wNt-E2-UtN"/>
                         <outlet property="PortField" destination="5Ss-fO-aC1" id="9kS-D3-Xul"/>
