@@ -1,7 +1,7 @@
 # TinyServer
 A lightweight simple web server with a GUI.
 
-![GUI Image](https://luigi-pizzolito.github.io/Gangster45671.github.io/TinyServer/pictures/GUI.png)
+![GUI Image](https://luigi-pizzolito.github.io/TinyServer/pictures/GUI.png)
 
 #### This is based on Jibble Web Server
 [Check out the original page here](http://www.jibble.org/jibblewebserver.php)
